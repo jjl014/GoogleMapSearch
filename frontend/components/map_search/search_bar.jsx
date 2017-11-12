@@ -17,7 +17,7 @@ export default class SearchBar extends React.Component {
   handleSubmit() {
     return (e) => {
       e.preventDefault();
-      console.log("submit");
+      console.log(`submit: ${this.state.query}`);
     };
   }
 
