@@ -1,23 +1,23 @@
 import React from 'react';
 
 const SearchListItem = ({business}) => {
-  const address = business.address.split(",");
+  const address = business.address.split(",").map(part => part.trim());
 
   // Generate stars with font awesome
   let stars = [];
   if (business.rating === 5 ) {
     for (let i = 0; i < 5; i++) {
-      stars.push(<i className="fa fa-star" aria-hidden="true"></i>);
+      stars.push(<i key={`${business.name}-full-star-${i}`} className="fa fa-star" aria-hidden="true"></i>);
     }
   } else if (business.rating) {
     for (let i = 0; i < business.rating - 1; i++) {
-      stars.push(<i className="fa fa-star" aria-hidden="true"></i>);
+      stars.push(<i key={`${business.name}-full-star-${i}`} className="fa fa-star" aria-hidden="true"></i>);
     }
     if (business.rating % 1 >= 0.5) {
-      stars.push(<i className="fa fa-star-half-o" aria-hidden="true"></i>);
+      stars.push(<i key={`${business.name}-half-star`} className="fa fa-star-half-o" aria-hidden="true"></i>);
     }
-    while (stars.length < 5) {
-      stars.push(<i className="fa fa-star-o" aria-hidden="true"></i>);
+    for (let i = stars.length; i < 5; i++) {
+      stars.push(<i key={`${business.name}-star-o-${i}`} className="fa fa-star-o" aria-hidden="true"></i>);
     }
   }
 
@@ -35,11 +35,11 @@ const SearchListItem = ({business}) => {
       <div className="biz-info v-box">
         <h3>{business.name}</h3>
         <p>
-          {address[0].trim()}<br/>
-          {`${address[1].trim()}, ${address[2].trim()}`}
+          {address[0]}<br/>
+          {`${address[1]}, ${address[2]}`}
         </p>
         <p className="rating">{business.rating ? business.rating.toFixed(1) : ""} {stars}</p>
-        <p>{cost === "" ? "$" : cost} &middot; {business.open ? "Open" : "Closed"}</p>
+        <p>{cost === "" ? "?" : cost} &middot; {business.open ? "Open" : "Closed"}</p>
       </div>
     </div>
   );

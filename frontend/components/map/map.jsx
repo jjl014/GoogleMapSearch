@@ -12,6 +12,7 @@ export default class Map extends React.Component {
   constructor(props) {
     super(props);
     this.query = "";
+    this.pos = {};
     this.updateBusinesses = this.updateBusinesses.bind(this);
   }
 
@@ -19,11 +20,11 @@ export default class Map extends React.Component {
     const map = this.refs.map;
     const mapOptions = {
       // Center on San Francisco
-      center: {lat: 37.7758, lng: -122.435},
       zoom: 13
     };
 
     this.map = new google.maps.Map(map, mapOptions);
+    window.map = this.map;
     this.markerManager = new MarkerManager(this.map);
     this.getUserGeoLocation();
 
@@ -45,20 +46,22 @@ export default class Map extends React.Component {
         this.map.setCenter(pos);
       }, () => {
         // Center map at SF if user doesn't allow location service
-        this.map.setCenter(this.map.getCenter());
+        this.map.setCenter({lat: 37.7758, lng: -122.435});
       });
     } else {
       // Browser doesn't support Geolocation
-      this.map.setCenter(this.map.getCenter());
+      this.map.setCenter({lat: 37.7758, lng: -122.435});
     }
   }
 
   componentDidUpdate() {
     // Prevent multiple updates that are unnecessary
+    const pos = this.map.getCenter();
     if (this.query !== this.props.query) {
       this.query = this.props.query;
+      this.pos = pos;
       let request = {
-        location: this.map.getCenter(),
+        location: pos,
         radius: "500",
         query: this.props.query
       };
@@ -86,7 +89,18 @@ export default class Map extends React.Component {
       });
       this.props.receiveBusinesses(businesses);
       this.markerManager.updateMarkers(businesses);
+      this.props.updateLoading(false);
     }
+  }
+
+  registerListeners() {
+    google.maps.event.addListener(this.map, 'idle', () => {
+      const { north, south, east, west } = this.map.getBounds().toJSON();
+      const bounds = {
+        northEast: { lat: north, lng: east },
+        southWest: { lat: south, lng: west } };
+      this.props.updateFilter('bounds', bounds);
+    });
   }
 
   render() {
