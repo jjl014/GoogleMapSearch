@@ -34,7 +34,7 @@ class MarkerManager {
       businessId: business.placeId
     });
 
-    marker.addListener('click', () => this.handleClick(business));
+    marker.addListener('click', () => this.handleClick(business, marker));
     this.markers[marker.businessId] = marker;
   }
 

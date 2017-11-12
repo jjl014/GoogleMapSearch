@@ -11,7 +11,7 @@ export default class SearchBar extends React.Component {
     return (e) => {
       e.preventDefault();
       let input = document.getElementById("map-search");
-      if (input.value !== "") {
+      if (input.value !== "" && input.value !== this.props.query) {
         this.props.updateLoading("loading", true);
         this.props.receiveFilter({type: "query", value: input.value});
       }

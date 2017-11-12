@@ -3,6 +3,7 @@ import { receiveFilter } from '../../actions/filter_actions';
 import SearchBar from './search_bar';
 
 const mapStateToProps = (state) => ({
+  query: state.filters.query
 });
 
 const mapDispatchToProps = (dispatch) => ({

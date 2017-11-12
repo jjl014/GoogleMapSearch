@@ -9,6 +9,7 @@ const getCoordsObj = latLng => ({
 });
 
 var service;
+var infoWindow;
 
 export default class Map extends React.Component {
   constructor(props) {
@@ -19,6 +20,7 @@ export default class Map extends React.Component {
     };
     this.updateBusinesses = this.updateBusinesses.bind(this);
     this.registerListeners = this.registerListeners.bind(this);
+    this.handleMarkerClick = this.handleMarkerClick.bind(this);
   }
 
   componentDidMount() {
@@ -30,13 +32,45 @@ export default class Map extends React.Component {
 
     this.map = new google.maps.Map(map, mapOptions);
     service = new google.maps.places.PlacesService(this.map);
-    this.markerManager = new MarkerManager(this.map);
+    this.markerManager = new MarkerManager(this.map, this.handleMarkerClick);
     this.getUserGeoLocation();
     this.registerListeners();
 
     // Use Google Places SearchBox for auto-fill
     let input = document.getElementById("map-search");
     let searchBox = new google.maps.places.SearchBox(input);
+  }
+
+  componentWillReceiveProps(newProps) {
+    const {location, query} = newProps;
+    if (location) {
+      this.map.panTo({lat: location.lat, lng: location.lng});
+      this.map.setZoom(16);
+    }
+    // Prevent multiple re-render
+    if (query && query !== this.props.query) {
+      let request = {
+        location: this.map.getCenter(),
+        radius: "500",
+        query
+      };
+      service.textSearch(request, this.updateBusinesses);
+    }
+  }
+
+  componentDidUpdate() {
+    if (!this.props.query){
+      // Remove all markers if no query
+      this.markerManager.updateMarkers([]);
+    }
+  }
+
+  handleMarkerClick(business, marker) {
+    let content = `${business.name}`;
+    infoWindow = new google.maps.InfoWindow({
+      content
+    });
+    infoWindow.open(this.map, marker);
   }
 
   getUserGeoLocation() {
@@ -68,30 +102,6 @@ export default class Map extends React.Component {
   handleGeoError() {
     this.map.setCenter({lat: 37.7758, lng: -122.435});
     this.setState({loadingMap: false});
-  }
-
-  componentWillReceiveProps(newProps) {
-    const {location, query} = newProps;
-    if (location) {
-      this.map.panTo({lat: location.lat, lng: location.lng});
-      this.map.setZoom(16);
-    }
-    // Prevent multiple re-render
-    if (query && query !== this.props.query) {
-      let request = {
-        location: this.map.getCenter(),
-        radius: "500",
-        query
-      };
-      service.textSearch(request, this.updateBusinesses);
-    }
-  }
-
-  componentDidUpdate() {
-    if (!this.props.query){
-      // Remove all markers if no query
-      this.markerManager.updateMarkers([]);
-    }
   }
 
   updateBusinesses(results, status) {
