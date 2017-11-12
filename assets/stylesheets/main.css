@@ -1,0 +1,14 @@
+#map-container {
+  width: 500px;
+  height: 500px;
+}
+
+.h-box {
+  display: flex;
+  flex-direction: row;
+}
+
+.v-box {
+  display: flex;
+  flex-direction: column;
+}
