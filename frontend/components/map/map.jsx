@@ -38,6 +38,10 @@ export default class Map extends React.Component {
       // Browser doesn't support Geolocation
       this.map.setCenter(this.map.getCenter());
     }
+
+
+    let input = document.getElementById("map-search");
+    let searchBox = new google.maps.places.SearchBox(input);
   }
 
   render() {

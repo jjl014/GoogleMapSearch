@@ -1,11 +1,10 @@
+/* global google:false */
+
 import React from 'react';
 
 export default class SearchBar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      query: ""
-    };
   }
 
   handleChange() {
@@ -17,7 +16,8 @@ export default class SearchBar extends React.Component {
   handleSubmit() {
     return (e) => {
       e.preventDefault();
-      console.log(`submit: ${this.state.query}`);
+      let input = document.getElementById("map-search");
+      console.log(`submit: ${input.value}`);
     };
   }
 
@@ -27,9 +27,9 @@ export default class SearchBar extends React.Component {
         <form>
           <div className="h-box">
           <input
-            onChange={this.handleChange()}
+            id="map-search"
             type="text"
-            className="search-bar">
+            size="50">
           </input>
           <button
             onClick={this.handleSubmit()}>
