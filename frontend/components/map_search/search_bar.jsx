@@ -7,17 +7,17 @@ export default class SearchBar extends React.Component {
     super(props);
   }
 
-  handleChange() {
-    return (e) => {
-      this.setState({query: e.currentTarget.value});
-    };
-  }
+  // handleChange() {
+  //   return (e) => {
+  //     this.setState({query: e.currentTarget.value});
+  //   };
+  // }
 
   handleSubmit() {
     return (e) => {
       e.preventDefault();
       let input = document.getElementById("map-search");
-      console.log(`submit: ${input.value}`);
+      this.props.updateQuery(input.value);
     };
   }
 
@@ -29,7 +29,8 @@ export default class SearchBar extends React.Component {
           <input
             id="map-search"
             type="text"
-            size="50">
+            size="50"
+            placeholder="Pizza, Sandwich, Boba, Coffee">
           </input>
           <button
             onClick={this.handleSubmit()}>

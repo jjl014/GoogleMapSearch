@@ -10,25 +10,36 @@ const getCoordsObj = latLng => ({
 export default class Map extends React.Component {
   constructor(props) {
     super(props);
+    this.query = "";
+    this.updateBusinesses = this.updateBusinesses.bind(this);
   }
 
   componentDidMount() {
     const map = this.refs.map;
     const mapOptions = {
-      //Center on SF
+      // Center on San Francisco
       center: {lat: 37.7758, lng: -122.435},
       zoom: 14
     };
 
     this.map = new google.maps.Map(map, mapOptions);
-    let GeoMarker = new GeolocationMarker(this.map);
+    this.getUserGeoLocation();
 
+    // Use Google Places SearchBox for auto-fill
+    let input = document.getElementById("map-search");
+    let searchBox = new google.maps.places.SearchBox(input);
+  }
+
+  getUserGeoLocation() {
+    // Use the browsers HTML5 geolocation service
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         var pos = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
+        // Set map center and marker for the user's location
+        let GeoMarker = new GeolocationMarker(this.map);
         this.map.setCenter(pos);
       }, () => {
         // Center map at SF if user doesn't allow location service
@@ -38,10 +49,36 @@ export default class Map extends React.Component {
       // Browser doesn't support Geolocation
       this.map.setCenter(this.map.getCenter());
     }
+  }
 
+  componentDidUpdate() {
+    if (this.query !== this.props.query) {
+      this.query = this.props.query;
+      let request = {
+        location: this.map.getCenter(),
+        radius: "500",
+        query: this.props.query
+      };
 
-    let input = document.getElementById("map-search");
-    let searchBox = new google.maps.places.SearchBox(input);
+      let service = new google.maps.places.PlacesService(this.map);
+      service.textSearch(request, this.updateBusinesses);
+    }
+  }
+
+  updateBusinesses(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      const businesses = results.map(place => {
+        return {
+          name: place.name,
+          placeId: place.place_id,
+          address: place.formatted_address,
+          location: place.geometry.location,
+          priceLevel: place.price_level,
+          rating: place.rating,
+        };
+      });
+      this.props.receiveBusinesses(businesses);
+    }
   }
 
   render() {
