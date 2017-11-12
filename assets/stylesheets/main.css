@@ -125,12 +125,10 @@ p.rating {
   color: #ff6e62;
 }
 
-.map-loader-wrapper {
-  height: 100vh;
-  width: 100%;
+.map-loader {
   position: absolute;
+  top: 36%;
+  left: 45%;
   display: flex;
-  justify-content: center;
-  align-items: center;
   z-index: 5;
 }

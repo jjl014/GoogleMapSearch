@@ -8,6 +8,8 @@ const getCoordsObj = latLng => ({
   lng: latLng.lng()
 });
 
+var service;
+
 export default class Map extends React.Component {
   constructor(props) {
     super(props);
@@ -16,6 +18,7 @@ export default class Map extends React.Component {
       loadingMap: false
     };
     this.updateBusinesses = this.updateBusinesses.bind(this);
+    this.registerListeners = this.registerListeners.bind(this);
   }
 
   componentDidMount() {
@@ -26,9 +29,10 @@ export default class Map extends React.Component {
     };
 
     this.map = new google.maps.Map(map, mapOptions);
-    window.map = this.map;
+    service = new google.maps.places.PlacesService(this.map);
     this.markerManager = new MarkerManager(this.map);
     this.getUserGeoLocation();
+    this.registerListeners();
 
     // Use Google Places SearchBox for auto-fill
     let input = document.getElementById("map-search");
@@ -47,6 +51,7 @@ export default class Map extends React.Component {
     } else {
       // Browser doesn't support Geolocation
       this.map.setCenter({lat: 37.7758, lng: -122.435});
+      this.setState({loadingMap: false});
     }
   }
 
@@ -58,28 +63,27 @@ export default class Map extends React.Component {
     // Set map center and marker for the user's location
     let GeoMarker = new GeolocationMarker(this.map);
     this.map.setCenter(pos);
-    console.log("done finding");
     this.setState({loadingMap: false});
   }
 
   handleGeoError() {
     this.map.setCenter({lat: 37.7758, lng: -122.435});
+    this.setState({loadingMap: false});
   }
 
   componentDidUpdate() {
     // Prevent multiple updates that are unnecessary
-    const pos = this.map.getCenter();
-    if (this.query !== this.props.query) {
+    if (this.props.query && this.query !== this.props.query) {
       this.query = this.props.query;
-      this.pos = pos;
       let request = {
-        location: pos,
+        location: this.map.getCenter(),
         radius: "500",
         query: this.props.query
       };
-
-      let service = new google.maps.places.PlacesService(this.map);
       service.textSearch(request, this.updateBusinesses);
+    } else if (!this.props.query){
+      // Remove all markers if no query
+      this.markerManager.updateMarkers([]);
     }
   }
 
@@ -107,11 +111,20 @@ export default class Map extends React.Component {
 
   registerListeners() {
     google.maps.event.addListener(this.map, 'idle', () => {
-      const { north, south, east, west } = this.map.getBounds().toJSON();
-      const bounds = {
-        northEast: { lat: north, lng: east },
-        southWest: { lat: south, lng: west } };
-      this.props.updateFilter('bounds', bounds);
+      // const { north, south, east, west } = this.map.getBounds().toJSON();
+      // const bounds = {
+      //   northEast: { lat: north, lng: east },
+      //   southWest: { lat: south, lng: west } };
+      // this.props.updateFilter('bounds', bounds);
+      if (this.props.query) {
+        let request = {
+          location: this.map.getCenter(),
+          radius: "500",
+          query: this.props.query
+        };
+
+        service.textSearch(request, this.updateBusinesses);
+      }
     });
   }
 
@@ -119,13 +132,11 @@ export default class Map extends React.Component {
     const {loadingMap} = this.state;
     let display;
     if (loadingMap) {
-      display = <div className="loader">Loading...</div>;
+      display = <div className="loader map-loader">Loading...</div>;
     }
     return (
       <div className="map-wrapper">
-        <div className="map-loader-wrapper">
-          {display}
-        </div>
+        {display}
         <div id='map-container' ref='map'>Map</div>
       </div>
     );

@@ -17,6 +17,14 @@ export default class SearchBar extends React.Component {
     };
   }
 
+  handleChange() {
+    return (e) => {
+      if (e.currentTarget.value === "") {
+        this.props.updateQuery("");
+      }
+    };
+  }
+
   render() {
     return (
       <div>
@@ -25,7 +33,8 @@ export default class SearchBar extends React.Component {
             <input
               id="map-search"
               type="text"
-              placeholder="Search Google Maps">
+              placeholder="Search Google Maps"
+              onChange={this.handleChange()}>
             </input>
             <button
               onClick={this.handleSubmit()}>
