@@ -1,12 +1,45 @@
 import React from 'react';
 
 const SearchListItem = ({business}) => {
+  const address = business.address.split(",");
+
+  // Generate stars with font awesome
+  let stars = [];
+  if (business.rating === 5 ) {
+    for (let i = 0; i < 5; i++) {
+      stars.push(<i className="fa fa-star" aria-hidden="true"></i>);
+    }
+  } else if (business.rating) {
+    for (let i = 0; i < business.rating - 1; i++) {
+      stars.push(<i className="fa fa-star" aria-hidden="true"></i>);
+    }
+    if (business.rating % 1 >= 0.5) {
+      stars.push(<i className="fa fa-star-half-o" aria-hidden="true"></i>);
+    }
+    while (stars.length < 5) {
+      stars.push(<i className="fa fa-star-o" aria-hidden="true"></i>);
+    }
+  }
+
+  // Generate cost
+  let cost = "";
+  for (let i = 0; i < business.priceLevel; i++) {
+    cost += "$";
+  }
+
   return (
-    <div className="search-list-item">
-      <img src={business.photo} alt={`${business.name}-photo`}/>
-      <div>
-        {business.name}<br/>
-        {business.address}
+    <div className="search-list-item h-box">
+      <div className="biz-img-wrapper">
+        <img src={business.photo} alt={`${business.name}-photo`}/>
+      </div>
+      <div className="biz-info v-box">
+        <h3>{business.name}</h3>
+        <p>
+          {address[0].trim()}<br/>
+          {`${address[1].trim()}, ${address[2].trim()}`}
+        </p>
+        <p className="rating">{business.rating ? business.rating.toFixed(1) : ""} {stars}</p>
+        <p>{cost === "" ? "$" : cost} &middot; {business.open ? "Open" : "Closed"}</p>
       </div>
     </div>
   );

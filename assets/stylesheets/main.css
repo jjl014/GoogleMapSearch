@@ -1,6 +1,25 @@
+ul, body, h3, p {
+  padding: 0;
+  margin: 0;
+}
+
+h3 {
+  font-size: 18px;
+  color: #2F2F2F;
+}
+
+body {
+  font-family: Arial;
+}
+
+ul {
+  overflow-y: auto;
+  height: calc(100vh - 50px);
+}
+
 #map-container {
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  height: inherit;
 }
 
 .h-box {
@@ -11,4 +30,84 @@
 .v-box {
   display: flex;
   flex-direction: column;
+}
+
+.super-wrapper {
+  height: 100vh;
+}
+
+.map-search-wrapper {
+  height: inherit;
+}
+
+.search-wrapper {
+  border-right: solid 0.5px #ff6e62;
+  min-width: 420px;
+  max-width: 420px;
+}
+
+.search-bar-wrapper {
+  width: 100%;
+  height: 50px;
+  background: #ff6e62;
+  box-sizing: border-box;
+  padding: 5px;
+}
+
+.search-bar-wrapper input {
+  box-sizing: border-box;
+  padding: 5px 10px 5px 10px;
+  font-size: 16px;
+  width: 100%;
+  border: 0px;
+  outline: none;
+}
+
+.search-bar-wrapper button {
+  outline: none;
+  background: #ff6e62;
+  opacity: 1;
+  border: 0;
+  padding: 0px 15px 2px 15px;
+  border: solid 3px white;
+  color: white;
+}
+
+.search-bar-wrapper button:hover {
+  background: #FF3827;
+  cursor: pointer;
+}
+
+.search-list-item {
+  width: 400px;
+  height: 100px;
+  padding: 10px;
+  border-bottom: solid 1px #ff6e62;
+}
+
+.biz-img-wrapper {
+  width: 100px;
+  height: 100px;
+}
+
+.biz-img-wrapper img{
+  object-fit: cover;
+  width:  100px;
+  height: 100px;
+}
+
+.biz-info {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 6px;
+  justify-content: space-around;
+}
+
+.biz-info p {
+  color: gray;
+  font-size: 14px;
+}
+
+p.rating {
+  color: #ff6e62;
 }

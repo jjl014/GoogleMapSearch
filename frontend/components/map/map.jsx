@@ -78,7 +78,10 @@ export default class Map extends React.Component {
           location: place.geometry.location,
           priceLevel: place.price_level,
           rating: place.rating,
-          photo: place.photos[0].getUrl({maxWidth: 500, maxHeight: 500})
+          photo: place.photos ?
+            place.photos[0].getUrl({maxWidth: 500, maxHeight: 500}) :
+            "https://res.cloudinary.com/jun/image/upload/v1506033108/business_90_square_i61t6u.png",
+          open: place.opening_hours ? place.opening_hours.open_now : ""
         };
       });
       this.props.receiveBusinesses(businesses);

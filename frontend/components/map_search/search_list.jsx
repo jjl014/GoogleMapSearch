@@ -7,7 +7,6 @@ const SearchList = ({businesses}) => {
   });
   return (
     <div>
-      <h1>Search List</h1>
       <ul>
         {businessList}
       </ul>

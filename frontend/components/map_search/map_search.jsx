@@ -20,14 +20,13 @@ class MapSearch extends React.Component {
   render() {
     console.log(this.state);
     return (
-      <div>
-        <h1>Map Search :D</h1>
+      <div className="super-wrapper">
         <div className="h-box map-search-wrapper">
           <div className="v-box search-wrapper">
             <SearchBar updateQuery={this.updateQuery()}/>
             <SearchListContainer/>
           </div>
-        <MapContainer query={this.state.query}/>
+          <MapContainer query={this.state.query}/>
         </div>
       </div>
     );

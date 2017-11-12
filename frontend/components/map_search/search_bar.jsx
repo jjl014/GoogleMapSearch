@@ -17,19 +17,18 @@ export default class SearchBar extends React.Component {
 
   render() {
     return (
-      <div className="search-bar-wrapper">
+      <div>
         <form>
-          <div className="h-box">
-          <input
-            id="map-search"
-            type="text"
-            size="50"
-            placeholder="Pizza, Sandwich, Boba, Coffee">
-          </input>
-          <button
-            onClick={this.handleSubmit()}>
-            Search
-          </button>
+          <div className="h-box search-bar-wrapper">
+            <input
+              id="map-search"
+              type="text"
+              placeholder="Search Google Maps">
+            </input>
+            <button
+              onClick={this.handleSubmit()}>
+              <i className="fa fa-lg fa-search" aria-hidden="true"></i>
+            </button>
           </div>
         </form>
       </div>
