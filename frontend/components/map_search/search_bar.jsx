@@ -14,6 +14,13 @@ export default class SearchBar extends React.Component {
     };
   }
 
+  handleSubmit() {
+    return (e) => {
+      e.preventDefault();
+      console.log("submit");
+    };
+  }
+
   render() {
     return (
       <div className="search-bar-wrapper">
@@ -24,7 +31,10 @@ export default class SearchBar extends React.Component {
             type="text"
             className="search-bar">
           </input>
-          <button>Search</button>
+          <button
+            onClick={this.handleSubmit()}>
+            Search
+          </button>
           </div>
         </form>
       </div>
