@@ -118,7 +118,6 @@ export default class Map extends React.Component {
 
   registerListeners() {
     google.maps.event.addListener(this.map, 'idle', () => {
-      console.log(this.props.location);
       if (this.props.query && !this.props.location) {
         let request = {
           location: this.map.getCenter(),
@@ -127,6 +126,7 @@ export default class Map extends React.Component {
         };
         service.textSearch(request, this.updateBusinesses);
       }
+      this.props.receiveFilter({type: "location", value: null});
     });
   }
 
