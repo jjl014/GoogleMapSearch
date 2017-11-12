@@ -70,17 +70,37 @@ export default class Map extends React.Component {
     this.setState({loadingMap: false});
   }
 
-  componentDidUpdate() {
-    // Prevent multiple updates that are unnecessary
-    if (this.props.query && this.query !== this.props.query) {
-      this.query = this.props.query;
+  componentWillReceiveProps(newProps) {
+    const {location, query} = newProps;
+    if (location) {
+      this.map.panTo({lat: location.lat, lng: location.lng});
+      this.map.setZoom(16);
+      this.props.receiveFilter({type: "location", value: null});
+    }
+    if (query && this.query !== query) {
+      this.query = query;
       let request = {
         location: this.map.getCenter(),
         radius: "500",
-        query: this.props.query
+        query
       };
       service.textSearch(request, this.updateBusinesses);
-    } else if (!this.props.query){
+    }
+  }
+
+  componentDidUpdate() {
+    const {location} = this.props;
+    // Prevent multiple updates that are unnecessary
+    // if (this.props.query && this.query !== this.props.query) {
+    //   this.query = this.props.query;
+    //   let request = {
+    //     location: this.map.getCenter(),
+    //     radius: "500",
+    //     query: this.props.query
+    //   };
+    //   service.textSearch(request, this.updateBusinesses);
+    // } else
+    if (!this.props.query){
       // Remove all markers if no query
       this.markerManager.updateMarkers([]);
     }
@@ -105,17 +125,13 @@ export default class Map extends React.Component {
       this.props.receiveBusinesses(businesses);
       this.markerManager.updateMarkers(businesses);
       this.props.updateLoading("loading", false);
+      this.query = "";
     }
   }
 
   registerListeners() {
     google.maps.event.addListener(this.map, 'idle', () => {
-      // const { north, south, east, west } = this.map.getBounds().toJSON();
-      // const bounds = {
-      //   northEast: { lat: north, lng: east },
-      //   southWest: { lat: south, lng: west } };
-      // this.props.updateFilter('bounds', bounds);
-      if (this.props.query) {
+      if (this.props.query && !this.props.location) {
         let request = {
           location: this.map.getCenter(),
           radius: "500",

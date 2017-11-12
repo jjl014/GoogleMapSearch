@@ -12,7 +12,7 @@ export default class SearchBar extends React.Component {
       e.preventDefault();
       let input = document.getElementById("map-search");
       if (input.value !== "") {
-        // this.props.updateQuery(input.value);
+        this.props.updateLoading("loading", true);
         this.props.receiveFilter({type: "query", value: input.value});
       }
     };
@@ -21,7 +21,6 @@ export default class SearchBar extends React.Component {
   handleChange() {
     return (e) => {
       if (e.currentTarget.value === "") {
-        // this.props.updateQuery("");
         this.props.receiveFilter({type: "query", value: e.currentTarget.value});
       }
     };

@@ -1,11 +1,11 @@
 import React from 'react';
-import MapSearch from './map_search/map_search';
+import MapSearchContainer from './map_search/map_search_container';
 import {Provider} from 'react-redux';
 
 const GoogleMapSearch = ({store}) => {
   return (
     <Provider store={store}>
-      <MapSearch />
+      <MapSearchContainer />
     </Provider>
   );
 };

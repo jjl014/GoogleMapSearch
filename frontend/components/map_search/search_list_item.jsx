@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SearchListItem = ({business}) => {
+const SearchListItem = ({business, handleClick}) => {
   const address = business.address.split(",").map(part => part.trim());
 
   // Generate stars with font awesome
@@ -28,7 +28,7 @@ const SearchListItem = ({business}) => {
   }
 
   return (
-    <div className="search-list-item h-box">
+    <div className="search-list-item h-box" onClick={handleClick}>
       <div className="biz-img-wrapper">
         <img src={business.photo} alt={`${business.name}-photo`}/>
       </div>
