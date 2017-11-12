@@ -12,7 +12,9 @@ export default class Map extends React.Component {
   constructor(props) {
     super(props);
     this.query = "";
-    this.pos = {};
+    this.state = {
+      loadingMap: false
+    };
     this.updateBusinesses = this.updateBusinesses.bind(this);
   }
 
@@ -35,23 +37,33 @@ export default class Map extends React.Component {
 
   getUserGeoLocation() {
     // Use the browsers HTML5 geolocation service
+    console.log("finding coords");
+    this.setState({loadingMap: true});
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        var pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        // Set map center and marker for the user's location
-        let GeoMarker = new GeolocationMarker(this.map);
-        this.map.setCenter(pos);
-      }, () => {
-        // Center map at SF if user doesn't allow location service
-        this.map.setCenter({lat: 37.7758, lng: -122.435});
-      });
+      navigator.geolocation.getCurrentPosition(
+        this.handleGeoLookup.bind(this),
+        this.handleGeoError.bind(this) // Center map at SF if user doesn't allow location service
+      );
     } else {
       // Browser doesn't support Geolocation
       this.map.setCenter({lat: 37.7758, lng: -122.435});
     }
+  }
+
+  handleGeoLookup(position) {
+    var pos = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
+    // Set map center and marker for the user's location
+    let GeoMarker = new GeolocationMarker(this.map);
+    this.map.setCenter(pos);
+    console.log("done finding");
+    this.setState({loadingMap: false});
+  }
+
+  handleGeoError() {
+    this.map.setCenter({lat: 37.7758, lng: -122.435});
   }
 
   componentDidUpdate() {
@@ -89,7 +101,7 @@ export default class Map extends React.Component {
       });
       this.props.receiveBusinesses(businesses);
       this.markerManager.updateMarkers(businesses);
-      this.props.updateLoading(false);
+      this.props.updateLoading("loading", false);
     }
   }
 
@@ -104,9 +116,17 @@ export default class Map extends React.Component {
   }
 
   render() {
+    const {loadingMap} = this.state;
+    let display;
+    if (loadingMap) {
+      display = <div className="loader">Loading...</div>;
+    }
     return (
-      <div id='map-container' ref='map'>
-        Map
+      <div className="map-wrapper">
+        <div className="map-loader-wrapper">
+          {display}
+        </div>
+        <div id='map-container' ref='map'>Map</div>
       </div>
     );
   }

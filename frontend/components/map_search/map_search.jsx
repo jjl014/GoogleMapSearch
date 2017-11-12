@@ -8,7 +8,8 @@ class MapSearch extends React.Component {
     super(props);
     this.state = {
       query: "",
-      loading: false
+      loading: false,
+      loadingMap: false
     };
   }
 
@@ -20,13 +21,13 @@ class MapSearch extends React.Component {
   }
 
   updateLoading() {
-    return (update) => {
-      this.setState({loading: update});
+    return (type, update) => {
+      this.setState({[type]: update});
     };
   }
 
   render() {
-    const {query, loading} = this.state;
+    const {query, loading, loadingMap} = this.state;
     return (
       <div className="super-wrapper">
         <div className="h-box map-search-wrapper">
@@ -34,7 +35,10 @@ class MapSearch extends React.Component {
             <SearchBar updateQuery={this.updateQuery()}/>
             { query === "" ? null : <SearchListContainer loading={loading}/>}
           </div>
-          <MapContainer query={this.state.query} updateLoading={this.updateLoading()}/>
+          <MapContainer
+            query={this.state.query}
+            updateLoading={this.updateLoading()}
+            loadingMap={loadingMap}/>
         </div>
       </div>
     );
