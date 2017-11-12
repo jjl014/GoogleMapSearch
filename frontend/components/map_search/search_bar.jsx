@@ -7,12 +7,6 @@ export default class SearchBar extends React.Component {
     super(props);
   }
 
-  // handleChange() {
-  //   return (e) => {
-  //     this.setState({query: e.currentTarget.value});
-  //   };
-  // }
-
   handleSubmit() {
     return (e) => {
       e.preventDefault();
