@@ -8,12 +8,22 @@ export default class SearchBar extends React.Component {
     };
   }
 
+  handleChange() {
+    return (e) => {
+      this.setState({query: e.currentTarget.value});
+    };
+  }
+
   render() {
     return (
       <div className="search-bar-wrapper">
         <form>
           <div className="h-box">
-          <input type="text" className="search-bar"></input>
+          <input
+            onChange={this.handleChange()}
+            type="text"
+            className="search-bar">
+          </input>
           <button>Search</button>
           </div>
         </form>

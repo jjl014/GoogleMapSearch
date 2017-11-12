@@ -6,8 +6,12 @@ const MapSearch = () => {
   return (
     <div>
       <h1>Map Search :D</h1>
-      <SearchBar />
-      <Map />
+      <div className="h-box map-search-wrapper">
+        <div className="v-box search-wrapper">
+          <SearchBar />
+        </div>
+        <Map />
+      </div>
     </div>
   );
 };
