@@ -122,7 +122,6 @@ export default class Map extends React.Component {
           radius: "500",
           query: this.props.query
         };
-
         service.textSearch(request, this.updateBusinesses);
       }
     });
