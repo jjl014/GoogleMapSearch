@@ -41,7 +41,6 @@ export default class Map extends React.Component {
 
   getUserGeoLocation() {
     // Use the browsers HTML5 geolocation service
-    console.log("finding coords");
     this.setState({loadingMap: true});
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(

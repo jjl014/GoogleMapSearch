@@ -5,7 +5,7 @@ const _defaultState = {
   location: {}
 };
 
-const businessReducer = (state = _defaultState, action) => {
+const filterReducer = (state = _defaultState, action) => {
   Object.freeze(state);
   switch(action.type) {
     case RECEIVE_FILTER:
@@ -15,4 +15,4 @@ const businessReducer = (state = _defaultState, action) => {
   }
 };
 
-export default businessReducer;
+export default filterReducer;

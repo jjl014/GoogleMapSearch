@@ -1,6 +1,6 @@
 import React from 'react';
 import MapContainer from '../map/map_container';
-import SearchBar from './search_bar';
+import SearchBarContainer from './search_bar_container';
 import SearchListContainer from './search_list_container';
 
 class MapSearch extends React.Component {
@@ -32,7 +32,7 @@ class MapSearch extends React.Component {
       <div className="super-wrapper">
         <div className="h-box map-search-wrapper">
           <div className="v-box search-wrapper">
-            <SearchBar updateQuery={this.updateQuery()}/>
+            <SearchBarContainer updateQuery={this.updateQuery()}/>
             { query === "" ? null : <SearchListContainer loading={loading}/>}
           </div>
           <MapContainer
