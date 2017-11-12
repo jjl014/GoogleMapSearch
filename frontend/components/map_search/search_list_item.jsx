@@ -1,9 +1,11 @@
 import React from 'react';
 
-const SearchListItem = () => {
+const SearchListItem = ({business}) => {
   return (
     <div>
-      <h1>SearchListItem</h1>
+      {
+        business.name
+      }
     </div>
   );
 };
