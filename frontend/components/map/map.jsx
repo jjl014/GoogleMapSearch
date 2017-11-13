@@ -1,5 +1,6 @@
 /* global google:false */
 /* global GeolocationMarker:false */
+
 import React from 'react';
 import MarkerManager from '../../util/marker_manager';
 
