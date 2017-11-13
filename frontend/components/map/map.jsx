@@ -55,6 +55,7 @@ export default class Map extends React.Component {
         radius: "500",
         query
       };
+      this.map.setZoom(13);
       service.textSearch(request, this.updateBusinesses);
     }
   }
